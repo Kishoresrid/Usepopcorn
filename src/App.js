@@ -233,7 +233,7 @@ function MovieDetails({ selectedId, handleCLose, handleAdd, watched }) {
       async function MovieDetail() {
         setLoad(true);
         const res = await fetch(
-          `httpsgit://www.omdbapi.com/?apikey=${KEY}&i=${selectedId}`
+          `https://www.omdbapi.com/?apikey=${KEY}&i=${selectedId}`
         );
         const data = await res.json();
         setmovie(data);
