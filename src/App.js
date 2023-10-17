@@ -89,8 +89,11 @@ export default function App() {
     setSelectedId(null);
   }
   function handleAdd(newMovie) {
-    setWatched((item) => [...item, newMovie]);
-    handleCLose();
+    if (watched) {
+      setWatched((item) => [...item, newMovie]);
+      handleCLose();
+    }
+
     // localStorage.setItem("watched", JSON.stringify([...watched, newMovie]));
   }
   function movieRemove(selectedId) {
