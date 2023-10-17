@@ -191,7 +191,7 @@ function MovieDetails({ selectedId, handleCLose, handleAdd, watched }) {
     };
     handleAdd(newMovie);
   }
-  const isWatched = watched.map((movie) => movie.imdbID).includes(selectedId);
+  const isWatched = watched?.map((movie) => movie.imdbID).includes(selectedId);
 
   useEffect(
     function () {
