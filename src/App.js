@@ -435,7 +435,7 @@ function WatchedSummary({ watched }) {
 function WatchedMovieList({ watched, movieRemove }) {
   return (
     <ul className="list">
-      {watched.map((movie) => (
+      {watched?.map((movie) => (
         <WatchedMovie movie={movie} movieRemove={movieRemove} />
       ))}
     </ul>
