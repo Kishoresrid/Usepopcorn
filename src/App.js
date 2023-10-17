@@ -88,8 +88,8 @@ export default function App() {
   function handleCLose() {
     setSelectedId(null);
   }
-  function handleAdd(newMovie) {
-    setWatched((watched) => [...watched, newMovie]);
+  function handleAdd() {
+    setWatched((watched) => [...watched]);
     handleCLose();
     // localStorage.setItem("watched", JSON.stringify([...watched, newMovie]));
   }
