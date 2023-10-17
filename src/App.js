@@ -1,5 +1,5 @@
 // import { fireEvent } from "@testing-library/react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import StarRating from "./StarRating";
 
 const tempMovieData = [
@@ -31,12 +31,17 @@ const average = (arr) =>
 
 const KEY = "2142bb6a";
 export default function App() {
-  const [movies, setMovies] = useState([...tempMovieData]);
-  const [watched, setWatched] = useState([]);
+  const [movies, setMovies] = useState([]);
   const [loader, setLoader] = useState(false);
   const [error, setError] = useState("");
   const [query, setQuery] = useState("");
   const [selectedId, setSelectedId] = useState(null);
+
+  // const [watched, setWatched] = useState([]);
+  const [watched, setWatched] = useState(function () {
+    const storedMovies = localStorage.getItem("watched");
+    return JSON.parse(storedMovies);
+  });
 
   useEffect(
     function () {
@@ -52,7 +57,7 @@ export default function App() {
           if (!res.ok) throw new Error("Something went wrong");
           const data = await res.json();
           if (data.Response === "False") throw new Error("Movie not found");
-          setMovies((movie) => [...movie, data.Search]);
+          setMovies(data.Search);
           console.log(data.Search);
           setError("");
         } catch (err) {
@@ -86,10 +91,18 @@ export default function App() {
   function handleAdd(newMovie) {
     setWatched((watched) => [...watched, newMovie]);
     handleCLose();
+    // localStorage.setItem("watched", JSON.stringify([...watched, newMovie]));
   }
   function movieRemove(selectedId) {
     setWatched(watched.filter((movie) => movie.imdbID !== selectedId));
   }
+
+  useEffect(
+    function () {
+      localStorage.setItem("watched", JSON.stringify(watched));
+    },
+    [watched]
+  );
 
   return (
     <>
@@ -296,6 +309,15 @@ function Logo() {
 }
 
 function Search({ query, setQuery }) {
+  // useEffect(function () {
+  //   const el = document.querySelector(".search");
+  //   console.log(el);
+  //   el.focus();
+  // }, []);
+  const inputEl = useRef(null);
+  useEffect(function () {
+    inputEl.current.focus();
+  }, []);
   return (
     <input
       className="search"
@@ -303,6 +325,7 @@ function Search({ query, setQuery }) {
       placeholder="Search movies..."
       value={query}
       onChange={(e) => setQuery(e.target.value)}
+      ref={inputEl}
     />
   );
 }
