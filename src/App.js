@@ -92,6 +92,9 @@ export default function App() {
     if (watched) {
       setWatched((item) => [...item, newMovie]);
       handleCLose();
+    } else {
+      setWatched([newMovie]);
+      handleCLose();
     }
 
     // localStorage.setItem("watched", JSON.stringify([...watched, newMovie]));
