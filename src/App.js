@@ -198,7 +198,9 @@ function MovieDetails({ selectedId, handleCLose, handleAdd, watched }) {
     handleAdd(newMovie);
   }
   const isWatched = watched?.map((movie) => movie.imdbID).includes(selectedId);
-
+  // const watchedUserRating = watched?.find(
+  //   (movie) => movie.imdbID === selectedId
+  // )?.userRating;
   useEffect(
     function () {
       async function MovieDetail() {
@@ -321,9 +323,25 @@ function Search({ query, setQuery }) {
   //   el.focus();
   // }, []);
   const inputEl = useRef(null);
-  useEffect(function () {
-    inputEl.current.focus();
-  }, []);
+  useEffect(
+    function () {
+      function callback(e) {
+        if (document.activeElement === inputEl.current) {
+          return;
+        }
+        if (e.code === "Enter") {
+          inputEl.current.focus();
+          setQuery("");
+        }
+      }
+      document.addEventListener("keydown", callback);
+
+      return function () {
+        document.removeEventListener("keydown", callback);
+      };
+    },
+    [setQuery]
+  );
   return (
     <input
       className="search"
@@ -410,7 +428,7 @@ function Movie({ movie, handleClick }) {
 function WatchedSummary({ watched }) {
   const avgImdbRating = average(watched?.map((movie) => movie.imdbRating));
   const avgUserRating = average(watched?.map((movie) => movie.userRating));
-  const avgRuntime = average(watched?.map((movie) => movie.runtime));
+  const avgRuntime = average(watched?.map((movie) => Number(movie.runtime)));
   return (
     <div className="summary">
       <h2>Movies to watch</h2>
